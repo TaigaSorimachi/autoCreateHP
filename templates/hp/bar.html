@@ -1,0 +1,140 @@
+{% extends "default.html" %}
+
+{# バー・クラブ向けテンプレート - 漆黒×パープル、ネオングロー #}
+
+{% block styles %}
+{{ super() }}
+
+/* ===== BAR / NIGHTLIFE THEME ===== */
+body {
+    font-family: 'Noto Sans JP', sans-serif;
+}
+
+.hero-name, .section-title, .cta-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+}
+
+.nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-size: 0.85rem;
+}
+
+.hero-label {
+    font-family: 'Cormorant Garamond', serif;
+    text-transform: uppercase;
+    letter-spacing: 0.5em;
+}
+
+/* ネオングロー効果 */
+.hero-name span {
+    text-shadow: 0 0 40px color-mix(in srgb, var(--accent1) 40%, transparent),
+                 0 0 80px color-mix(in srgb, var(--accent2) 20%, transparent);
+    -webkit-text-fill-color: unset;
+    background: none;
+    color: var(--text);
+}
+
+/* パララックスヒーロー */
+.hero-bg img, .hero-bg object {
+    transform: scale(1.1);
+    transition: transform 0.1s ease-out;
+}
+
+/* メッシュグラデーションにネオン感 */
+.hero-mesh {
+    background:
+        radial-gradient(ellipse 60% 50% at 20% 40%, color-mix(in srgb, var(--accent1) 20%, transparent), transparent),
+        radial-gradient(ellipse 50% 60% at 80% 60%, color-mix(in srgb, var(--accent2) 18%, transparent), transparent),
+        radial-gradient(ellipse 40% 40% at 50% 20%, rgba(100, 0, 180, 0.12), transparent),
+        var(--bg);
+}
+
+/* セクションタイトル */
+.section-title {
+    letter-spacing: 0.1em;
+}
+.section-title::after {
+    width: 2rem;
+    background: var(--accent1);
+}
+
+/* タグ: ネオンボーダー */
+.tag {
+    background: transparent;
+    border: 1px solid color-mix(in srgb, var(--accent1) 50%, transparent);
+    border-radius: 2px;
+    letter-spacing: 0.05em;
+}
+.tag:hover {
+    background: color-mix(in srgb, var(--accent1) 15%, transparent);
+    box-shadow: 0 0 20px color-mix(in srgb, var(--accent1) 20%, transparent);
+}
+
+/* ギャラリー: ホバーグロー */
+.gallery-item {
+    border-radius: 8px;
+    transition: box-shadow 0.4s;
+}
+.gallery-item:hover {
+    box-shadow: 0 0 30px color-mix(in srgb, var(--accent1) 25%, transparent);
+}
+
+/* 情報カード: ダーク */
+.info-item {
+    background: rgba(0,0,0,0.4);
+    border-color: color-mix(in srgb, var(--accent1) 15%, transparent);
+}
+.info-item:hover {
+    border-color: color-mix(in srgb, var(--accent1) 50%, transparent);
+    box-shadow: 0 0 24px color-mix(in srgb, var(--accent1) 15%, transparent);
+}
+
+/* CTA: ネオンボタン */
+.cta-btn {
+    border-radius: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 1rem;
+}
+.cta-btn:hover {
+    box-shadow: 0 0 40px color-mix(in srgb, var(--accent1) 50%, transparent),
+                0 0 80px color-mix(in srgb, var(--accent2) 30%, transparent);
+}
+
+/* フッター */
+.footer {
+    background: rgba(0,0,0,0.5);
+    font-family: 'Cormorant Garamond', serif;
+    letter-spacing: 0.08em;
+}
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+
+// パララックス効果
+(function() {
+    const heroBg = document.querySelector('.hero-bg img, .hero-bg object');
+    if (!heroBg) return;
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            requestAnimationFrame(() => {
+                const scrolled = window.pageYOffset;
+                if (scrolled < window.innerHeight) {
+                    heroBg.style.transform = `scale(1.1) translateY(${scrolled * 0.25}px)`;
+                }
+                ticking = false;
+            });
+            ticking = true;
+        }
+    }, { passive: true });
+})();
+{% endblock %}

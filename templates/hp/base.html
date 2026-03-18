@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ biz.name }}</title>
+    <meta name="description" content="{{ biz.description | default(biz.name ~ 'のホームページへようこそ。') }}">
+    <meta property="og:title" content="{{ biz.name }}">
+    <meta property="og:description" content="{{ biz.description | default(biz.name ~ 'のホームページへようこそ。') }}">
+    <meta property="og:type" content="website">
+    {% if images.hero %}
+    <meta property="og:image" content="{{ images.hero }}">
+    {% endif %}
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    {% block fonts %}
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=Noto+Serif+JP:wght@400;500;700;900&family=Zen+Kaku+Gothic+New:wght@400;700&family=Cormorant+Garamond:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    {% endblock %}
+    <style>
+        {% block base_styles %}
+        :root {
+            --bg: {{ colors.bg }};
+            --surface: {{ colors.surface }};
+            --accent1: {{ colors.accent1 }};
+            --accent2: {{ colors.accent2 }};
+            --text: {{ colors.text }};
+            --text-muted: {{ colors.muted }};
+            --border: rgba(255,255,255,0.08);
+            --surface-hover: rgba(255,255,255,0.06);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: {{ colors.font_body }};
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideDown {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(0); }
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; transform: scaleY(1); }
+            50% { opacity: 1; transform: scaleY(1.2); }
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+
+        /* ===== SECTIONS ===== */
+        .section {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 6rem 2rem;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .section-title {
+            font-family: {{ colors.font_display }};
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            font-weight: 700;
+            margin-bottom: 3rem;
+            position: relative;
+            display: inline-block;
+            letter-spacing: 0.02em;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -0.75rem;
+            left: 0;
+            width: 2.5rem;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent1), var(--accent2));
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 600px) {
+            .section { padding: 4rem 1.25rem; }
+        }
+        {% endblock %}
+
+        {% block styles %}{% endblock %}
+    </style>
+</head>
+<body>
+    {% block nav %}{% endblock %}
+    {% block hero %}{% endblock %}
+    {% block about %}{% endblock %}
+    {% block gallery %}{% endblock %}
+    {% block info %}{% endblock %}
+    {% block access %}{% endblock %}
+    {% block cta %}{% endblock %}
+    {% block footer %}{% endblock %}
+
+    <script>
+        {% block scripts %}
+        // IntersectionObserver スクロールアニメーション
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('visible');
+                    observer.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.08, rootMargin: '0px 0px -60px 0px' });
+        document.querySelectorAll('.section').forEach(s => observer.observe(s));
+
+        // スムーススクロール（ナビリンク）
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', e => {
+                e.preventDefault();
+                const target = document.querySelector(a.getAttribute('href'));
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+        {% endblock %}
+    </script>
+</body>
+</html>

@@ -1,0 +1,182 @@
+{% extends "default.html" %}
+
+{# 高級店・フレンチ向けテンプレート - 漆黒×シャンパンゴールド、ミニマル #}
+
+{% block styles %}
+{{ super() }}
+
+/* ===== LUXURY / FINE DINING THEME ===== */
+body {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: 300;
+    letter-spacing: 0.02em;
+}
+
+.hero-name, .section-title, .cta-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+}
+
+.nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+}
+
+/* ヒーロー: 極限のエレガンス */
+.hero-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    letter-spacing: 0.8em;
+    font-size: 0.6rem;
+}
+
+.hero-name {
+    font-size: clamp(2.5rem, 10vw, 5.5rem);
+    font-weight: 300;
+    letter-spacing: 0.1em;
+}
+
+.hero-name span {
+    background: linear-gradient(135deg, #d4c4a8, #b8a088, #d4c4a8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero-desc {
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 300;
+    font-size: 0.95rem;
+    letter-spacing: 0.05em;
+    max-width: 520px;
+    color: rgba(255,255,255,0.5);
+}
+
+/* セクション: 大きな余白 */
+.section {
+    padding: 8rem 3rem;
+    max-width: 1000px;
+}
+
+/* セクションタイトル: ミニマル */
+.section-title {
+    font-weight: 300;
+    font-size: 1.4rem;
+    letter-spacing: 0.2em;
+}
+.section-title::after {
+    width: 1.5rem;
+    height: 1px;
+    background: var(--accent1);
+}
+
+/* タグ: ミニマルラインスタイル */
+.tag {
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 300;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    padding: 0.6rem 1.8rem;
+    background: transparent;
+    border: 1px solid color-mix(in srgb, var(--accent1) 30%, transparent);
+    border-radius: 0;
+}
+.tag:hover {
+    background: color-mix(in srgb, var(--accent1) 8%, transparent);
+}
+
+/* ギャラリー: 広い間隔 */
+.gallery-grid {
+    gap: 1.5rem;
+}
+.gallery-item {
+    border-radius: 2px;
+    border: 1px solid color-mix(in srgb, var(--accent1) 12%, transparent);
+}
+
+/* 情報カード: ミニマル */
+.info-grid {
+    gap: 1.25rem;
+}
+.info-item {
+    background: transparent;
+    border-color: color-mix(in srgb, var(--accent1) 15%, transparent);
+    border-radius: 0;
+    padding: 2rem;
+}
+.info-item:hover {
+    background: color-mix(in srgb, var(--accent1) 5%, transparent);
+}
+.info-icon {
+    background: transparent;
+    border-radius: 0;
+}
+.info-label {
+    font-family: 'Cormorant Garamond', serif;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-size: 0.65rem;
+}
+.info-value {
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 300;
+    font-size: 0.9rem;
+}
+
+/* 地図: ミニマル */
+.map-container {
+    border-radius: 0;
+    border: 1px solid color-mix(in srgb, var(--accent1) 15%, transparent);
+}
+
+/* CTA: エレガント */
+.cta-section {
+    padding: 10rem 3rem;
+}
+.cta-title {
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    font-size: clamp(1.3rem, 4vw, 1.8rem);
+}
+.cta-sub {
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    font-size: 0.85rem;
+}
+.cta-btn {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    border-radius: 0;
+    padding: 1.25rem 3.5rem;
+    font-size: 1rem;
+}
+
+/* フッター */
+.footer {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    padding: 4rem 2rem;
+}
+.footer-powered {
+    font-family: 'Noto Sans JP', sans-serif;
+    letter-spacing: 0.05em;
+}
+
+/* スクロールヒント */
+.scroll-hint span {
+    font-family: 'Cormorant Garamond', serif;
+    letter-spacing: 0.4em;
+}
+
+@media (max-width: 600px) {
+    .section { padding: 5rem 1.5rem; }
+    .cta-section { padding: 6rem 1.5rem; }
+}
+{% endblock %}

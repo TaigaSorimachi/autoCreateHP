@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python pipeline.py:*)",
+      "Bash(tree:*)",
+      "Bash(find:*)",
+      "Bash(python -m json.tool:*)"
+    ]
+  }
+}
