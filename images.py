@@ -18,8 +18,10 @@ except ImportError:
 from config import (
     GOOGLE_PLACES_API_KEY,
     UNSPLASH_ACCESS_KEY,
+    PEXELS_API_KEY,
     USE_MOCK,
     HAS_UNSPLASH,
+    HAS_PEXELS,
     PHOTO_MAX_WIDTH_HERO,
     PHOTO_MAX_WIDTH_GALLERY,
     PHOTO_QUALITY,
@@ -72,12 +74,36 @@ UNSPLASH_KEYWORDS = {
 }
 
 
+# Pexels検索キーワード（業種別）
+# Pexelsは英語プラットフォームなので、具体的な英語キーワードを使用
+PEXELS_KEYWORDS = {
+    "sushi": "nigiri sushi plate",
+    "ramen": "ramen noodle bowl",
+    "yakiniku": "yakiniku grilled meat charcoal",
+    "yakitori": "yakitori chicken skewer",
+    "izakaya": "izakaya japanese food",
+    "bar": "cocktail bar dark interior",
+    "cafe": "coffee cafe latte art",
+    "french": "french fine dining plated",
+    "italian": "italian pasta dish",
+    "tempura": "tempura shrimp japanese",
+    "tonkatsu": "tonkatsu pork cutlet",
+    "soba": "soba noodle japanese",
+    "unagi": "unagi eel grilled rice",
+    "chinese": "chinese dim sum restaurant",
+    "korean": "korean bbq samgyeopsal",
+    "luxury": "luxury fine dining restaurant",
+    "default": "japanese restaurant food",
+}
+
+
 class ImageFetcher:
     """画像取得・キャッシュ管理クラス"""
 
     def __init__(self):
         self.google_api_key = GOOGLE_PLACES_API_KEY
         self.unsplash_key = UNSPLASH_ACCESS_KEY
+        self.pexels_key = PEXELS_API_KEY
 
     def fetch_for_business(self, business: dict, output_dir: str, category: str = "default") -> dict:
         """
@@ -120,14 +146,21 @@ class ImageFetcher:
                 result["source"] = "google_places"
                 return result
 
-        # Priority 2: Unsplash API
+        # Priority 2: Pexels API
+        if self.pexels_key:
+            keyword = PEXELS_KEYWORDS.get(category, PEXELS_KEYWORDS["default"])
+            if self._fetch_pexels(keyword, images_dir, result):
+                result["source"] = "pexels"
+                return result
+
+        # Priority 3: Unsplash API
         if self.unsplash_key:
             keyword = UNSPLASH_KEYWORDS.get(category, UNSPLASH_KEYWORDS["default"])
             if self._fetch_unsplash(keyword, images_dir, result):
                 result["source"] = "unsplash"
                 return result
 
-        # Priority 3: SVG プレースホルダー生成
+        # Priority 4: SVG プレースホルダー生成
         self._generate_svg_placeholders(category, images_dir, result)
         result["source"] = "placeholder"
         return result
@@ -264,6 +297,76 @@ class ImageFetcher:
 
         except Exception as e:
             print(f"[WARNING] Unsplash API call failed: {e}")
+            return False
+
+    def _fetch_pexels(self, query: str, images_dir: str, result: dict) -> bool:
+        """Pexels API から画像を取得"""
+        if not self.pexels_key:
+            return False
+
+        url = (
+            f"https://api.pexels.com/v1/search"
+            f"?query={urllib.parse.quote(query)}"
+            f"&per_page={MAX_PHOTOS_PER_STORE}"
+            f"&orientation=landscape"
+        )
+
+        try:
+            req = urllib.request.Request(url)
+            req.add_header("Authorization", self.pexels_key)
+            req.add_header("User-Agent", "ApoTaro/1.0")
+
+            with urllib.request.urlopen(req, timeout=10) as resp:
+                data = json.loads(resp.read())
+
+            photos = data.get("photos", [])
+            if not photos:
+                print(f"[WARNING] Pexels: no photos found for '{query}'")
+                return False
+
+            success = False
+            slots = ["hero"] + [f"gallery_{i}" for i in range(1, 5)]
+
+            for i, photo in enumerate(photos[:MAX_PHOTOS_PER_STORE]):
+                if i >= len(slots):
+                    break
+
+                slot = slots[i]
+                # hero は large2x (1920px)、gallery は large (940px)
+                src = photo.get("src", {})
+                if slot == "hero":
+                    image_url = src.get("large2x", src.get("large", ""))
+                    max_width = PHOTO_MAX_WIDTH_HERO
+                else:
+                    image_url = src.get("large", src.get("medium", ""))
+                    max_width = PHOTO_MAX_WIDTH_GALLERY
+
+                if not image_url:
+                    continue
+
+                try:
+                    dl_req = urllib.request.Request(image_url)
+                    dl_req.add_header("User-Agent", "ApoTaro/1.0")
+                    with urllib.request.urlopen(dl_req, timeout=15) as resp:
+                        image_data = resp.read()
+
+                    output_path = os.path.join(images_dir, f"{slot}.jpg")
+                    if self._save_and_optimize_image(image_data, output_path, max_width):
+                        if slot == "hero":
+                            result["hero"] = "images/hero.jpg"
+                        else:
+                            result["gallery"].append(f"images/{slot}.jpg")
+                        success = True
+                        print(f"  [PEXELS] {slot} saved ({photo.get('photographer', 'unknown')})")
+
+                except Exception as e:
+                    print(f"[WARNING] Pexels image download failed: {e}")
+                    continue
+
+            return success
+
+        except Exception as e:
+            print(f"[WARNING] Pexels API call failed: {e}")
             return False
 
     def _save_and_optimize_image(

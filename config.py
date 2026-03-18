@@ -18,12 +18,14 @@ except ImportError:
 # ──────────────────────────────
 GOOGLE_PLACES_API_KEY = os.environ.get("GOOGLE_PLACES_API_KEY", "")
 UNSPLASH_ACCESS_KEY = os.environ.get("UNSPLASH_ACCESS_KEY", "")
+PEXELS_API_KEY = os.environ.get("PEXELS_API_KEY", "")
 
 # ──────────────────────────────
 #  モード判定
 # ──────────────────────────────
 USE_MOCK = not bool(GOOGLE_PLACES_API_KEY)
 HAS_UNSPLASH = bool(UNSPLASH_ACCESS_KEY)
+HAS_PEXELS = bool(PEXELS_API_KEY)
 
 # ──────────────────────────────
 #  パス設定

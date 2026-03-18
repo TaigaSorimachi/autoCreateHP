@@ -1,6 +1,6 @@
 {% extends "default.html" %}
 
-{# 高級店・フレンチ向けテンプレート - 漆黒×シャンパンゴールド、ミニマル #}
+{# 高級店・フレンチ向けテンプレート - 漆黒×シャンパンゴールド、極上ミニマル #}
 
 {% block styles %}
 {{ super() }}
@@ -30,12 +30,12 @@ body {
 .hero-label {
     font-family: 'Cormorant Garamond', serif;
     font-weight: 400;
-    letter-spacing: 0.8em;
+    letter-spacing: 1em;
     font-size: 0.6rem;
 }
 
 .hero-name {
-    font-size: clamp(2.5rem, 10vw, 5.5rem);
+    font-size: clamp(3rem, 12vw, 6rem);
     font-weight: 300;
     letter-spacing: 0.1em;
 }
@@ -56,9 +56,9 @@ body {
     color: rgba(255,255,255,0.5);
 }
 
-/* セクション: 大きな余白 */
+/* セクション: 極上の余白 */
 .section {
-    padding: 8rem 3rem;
+    padding: 10rem 3rem;
     max-width: 1000px;
 }
 
@@ -72,6 +72,12 @@ body {
     width: 1.5rem;
     height: 1px;
     background: var(--accent1);
+}
+
+/* セクションディバイダー: 繊細 */
+.section-divider {
+    width: 30px;
+    opacity: 0.5;
 }
 
 /* タグ: ミニマルラインスタイル */
@@ -97,19 +103,28 @@ body {
     border-radius: 2px;
     border: 1px solid color-mix(in srgb, var(--accent1) 12%, transparent);
 }
+.gallery-placeholder {
+    border-radius: 2px;
+    border: 1px solid color-mix(in srgb, var(--accent1) 10%, transparent);
+}
 
-/* 情報カード: ミニマル */
+/* 情報カード: リスト型ミニマル */
 .info-grid {
-    gap: 1.25rem;
+    grid-template-columns: 1fr;
+    gap: 0;
 }
 .info-item {
     background: transparent;
-    border-color: color-mix(in srgb, var(--accent1) 15%, transparent);
+    border: none;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
     border-radius: 0;
-    padding: 2rem;
+    padding: 2rem 0;
+}
+.info-item:last-child {
+    border-bottom: none;
 }
 .info-item:hover {
-    background: color-mix(in srgb, var(--accent1) 5%, transparent);
+    background: color-mix(in srgb, var(--accent1) 3%, transparent);
 }
 .info-icon {
     background: transparent;
@@ -135,7 +150,7 @@ body {
 
 /* CTA: エレガント */
 .cta-section {
-    padding: 10rem 3rem;
+    padding: 12rem 3rem;
 }
 .cta-title {
     font-weight: 300;
@@ -155,6 +170,11 @@ body {
     border-radius: 0;
     padding: 1.25rem 3.5rem;
     font-size: 1rem;
+}
+.cta-note {
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 300;
+    letter-spacing: 0.05em;
 }
 
 /* フッター */
@@ -176,7 +196,8 @@ body {
 }
 
 @media (max-width: 600px) {
-    .section { padding: 5rem 1.5rem; }
-    .cta-section { padding: 6rem 1.5rem; }
+    .section { padding: 6rem 1.5rem; }
+    .cta-section { padding: 7rem 1.5rem; }
+    .info-grid { grid-template-columns: 1fr; }
 }
 {% endblock %}

@@ -6,6 +6,12 @@
 {{ super() }}
 
 /* ===== BAR / NIGHTLIFE THEME ===== */
+@keyframes meshShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
 body {
     font-family: 'Noto Sans JP', sans-serif;
 }
@@ -30,10 +36,11 @@ body {
     letter-spacing: 0.5em;
 }
 
-/* ネオングロー効果 */
+/* ネオングロー効果（強化） */
 .hero-name span {
-    text-shadow: 0 0 40px color-mix(in srgb, var(--accent1) 40%, transparent),
-                 0 0 80px color-mix(in srgb, var(--accent2) 20%, transparent);
+    text-shadow: 0 0 40px color-mix(in srgb, var(--accent1) 60%, transparent),
+                 0 0 80px color-mix(in srgb, var(--accent2) 35%, transparent),
+                 0 0 120px color-mix(in srgb, var(--accent1) 15%, transparent);
     -webkit-text-fill-color: unset;
     background: none;
     color: var(--text);
@@ -45,13 +52,16 @@ body {
     transition: transform 0.1s ease-out;
 }
 
-/* メッシュグラデーションにネオン感 */
+/* メッシュグラデーション + アニメーション */
 .hero-mesh {
     background:
-        radial-gradient(ellipse 60% 50% at 20% 40%, color-mix(in srgb, var(--accent1) 20%, transparent), transparent),
-        radial-gradient(ellipse 50% 60% at 80% 60%, color-mix(in srgb, var(--accent2) 18%, transparent), transparent),
-        radial-gradient(ellipse 40% 40% at 50% 20%, rgba(100, 0, 180, 0.12), transparent),
+        radial-gradient(ellipse 60% 50% at 20% 40%, color-mix(in srgb, var(--accent1) 25%, transparent), transparent),
+        radial-gradient(ellipse 50% 60% at 80% 60%, color-mix(in srgb, var(--accent2) 22%, transparent), transparent),
+        radial-gradient(ellipse 40% 40% at 50% 20%, rgba(100, 0, 180, 0.15), transparent),
+        radial-gradient(ellipse 70% 50% at 60% 80%, color-mix(in srgb, var(--accent1) 10%, transparent), transparent),
         var(--bg);
+    background-size: 200% 200%;
+    animation: meshShift 15s ease infinite;
 }
 
 /* セクションタイトル */
@@ -61,6 +71,11 @@ body {
 .section-title::after {
     width: 2rem;
     background: var(--accent1);
+}
+
+/* セクションディバイダーにグロー */
+.section-divider {
+    box-shadow: 0 0 12px color-mix(in srgb, var(--accent1) 30%, transparent);
 }
 
 /* タグ: ネオンボーダー */
@@ -83,6 +98,13 @@ body {
 .gallery-item:hover {
     box-shadow: 0 0 30px color-mix(in srgb, var(--accent1) 25%, transparent);
 }
+.gallery-placeholder {
+    border-radius: 8px;
+    border-color: color-mix(in srgb, var(--accent1) 20%, transparent);
+}
+.gallery-placeholder:hover {
+    box-shadow: 0 0 24px color-mix(in srgb, var(--accent1) 15%, transparent);
+}
 
 /* 情報カード: ダーク */
 .info-item {
@@ -94,7 +116,7 @@ body {
     box-shadow: 0 0 24px color-mix(in srgb, var(--accent1) 15%, transparent);
 }
 
-/* CTA: ネオンボタン */
+/* CTA: ネオンボタン（常時グロー） */
 .cta-btn {
     border-radius: 0;
     text-transform: uppercase;
@@ -102,6 +124,7 @@ body {
     font-family: 'Cormorant Garamond', serif;
     font-weight: 600;
     font-size: 1rem;
+    box-shadow: 0 0 30px color-mix(in srgb, var(--accent1) 25%, transparent);
 }
 .cta-btn:hover {
     box-shadow: 0 0 40px color-mix(in srgb, var(--accent1) 50%, transparent),

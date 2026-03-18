@@ -162,7 +162,97 @@ TEMPLATE_MAP = {
     "sushi": "sushi.html",
     "bar": "bar.html",
     "luxury": "luxury.html",
+    "french": "luxury.html",
     # その他は default.html を使用
+}
+
+# 業種別デフォルトメニュー（APIキーなしのフォールバック）
+DEFAULT_MENUS = {
+    "sushi": [
+        {"name": "おまかせ握り 十貫", "price": "¥3,800"},
+        {"name": "特上ちらし", "price": "¥2,800"},
+        {"name": "季節の刺身盛り合わせ", "price": "¥2,200"},
+    ],
+    "ramen": [
+        {"name": "特製煮干しラーメン", "price": "¥980"},
+        {"name": "味玉つけ麺", "price": "¥1,100"},
+        {"name": "チャーシュー丼セット", "price": "¥1,300"},
+    ],
+    "yakiniku": [
+        {"name": "黒毛和牛カルビ", "price": "¥1,980"},
+        {"name": "厚切りタン塩", "price": "¥1,680"},
+        {"name": "ホルモン5種盛り", "price": "¥1,480"},
+    ],
+    "yakitori": [
+        {"name": "おまかせ串 五本", "price": "¥980"},
+        {"name": "博多とりかわ", "price": "¥200/本"},
+        {"name": "つくね 月見", "price": "¥250/本"},
+    ],
+    "izakaya": [
+        {"name": "刺身三種盛り", "price": "¥1,280"},
+        {"name": "自家製だし巻き卵", "price": "¥680"},
+        {"name": "名物 鶏の唐揚げ", "price": "¥780"},
+    ],
+    "bar": [
+        {"name": "オリジナルカクテル", "price": "¥1,200"},
+        {"name": "ウイスキー 山崎12年", "price": "¥1,800"},
+        {"name": "季節のフルーツカクテル", "price": "¥1,500"},
+    ],
+    "cafe": [
+        {"name": "スペシャルティコーヒー", "price": "¥580"},
+        {"name": "自家製チーズケーキ", "price": "¥680"},
+        {"name": "季節のパフェ", "price": "¥980"},
+    ],
+    "french": [
+        {"name": "本日のアミューズ", "price": "コース内"},
+        {"name": "シェフのおまかせコース", "price": "¥12,000"},
+        {"name": "季節のデセール", "price": "¥1,800"},
+    ],
+    "italian": [
+        {"name": "自家製パスタ トリュフクリーム", "price": "¥2,200"},
+        {"name": "マルゲリータ", "price": "¥1,600"},
+        {"name": "本日の鮮魚カルパッチョ", "price": "¥1,800"},
+    ],
+    "tempura": [
+        {"name": "天ぷら定食", "price": "¥1,800"},
+        {"name": "季節の天ぷら盛り合わせ", "price": "¥2,400"},
+        {"name": "かき揚げ丼", "price": "¥1,200"},
+    ],
+    "tonkatsu": [
+        {"name": "特上ロースかつ定食", "price": "¥1,800"},
+        {"name": "ヒレかつ定食", "price": "¥1,600"},
+        {"name": "海老フライ定食", "price": "¥1,500"},
+    ],
+    "soba": [
+        {"name": "せいろそば", "price": "¥900"},
+        {"name": "天せいろ", "price": "¥1,600"},
+        {"name": "鴨南蛮", "price": "¥1,400"},
+    ],
+    "unagi": [
+        {"name": "うな重 松", "price": "¥3,800"},
+        {"name": "うな重 竹", "price": "¥2,800"},
+        {"name": "白焼き", "price": "¥2,200"},
+    ],
+    "chinese": [
+        {"name": "四川麻婆豆腐", "price": "¥1,280"},
+        {"name": "海老チリソース", "price": "¥1,580"},
+        {"name": "点心盛り合わせ", "price": "¥1,680"},
+    ],
+    "korean": [
+        {"name": "サムギョプサル", "price": "¥1,480"},
+        {"name": "チーズタッカルビ", "price": "¥1,380"},
+        {"name": "石焼ビビンバ", "price": "¥1,180"},
+    ],
+    "luxury": [
+        {"name": "おまかせコース", "price": "¥15,000"},
+        {"name": "本日のアミューズ", "price": "コース内"},
+        {"name": "季節のデセール", "price": "¥2,000"},
+    ],
+    "default": [
+        {"name": "本日のおすすめ", "price": "時価"},
+        {"name": "シェフの気まぐれプレート", "price": "¥1,500"},
+        {"name": "季節の一品", "price": "¥1,200"},
+    ],
 }
 
 
@@ -234,12 +324,16 @@ class HPGenerator:
         # 4. カラースキーム取得
         colors = COLOR_SCHEMES.get(category, COLOR_SCHEMES["default"])
 
-        # 5. HTML生成
+        # 5. メニューデータ準備
+        menu_items = business.get("menu", DEFAULT_MENUS.get(category, DEFAULT_MENUS["default"]))
+
+        # 6. HTML生成
         html = template.render(
             biz=business,
             images=images,
             colors=colors,
             category=category,
+            menu_items=menu_items,
             year=datetime.now().year,
         )
 

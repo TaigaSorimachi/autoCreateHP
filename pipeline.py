@@ -107,7 +107,7 @@ class Pipeline:
         # ──────────────────────────────
         self.log("STEP 3/4: 画像取得 + HP生成", "start")
         generated = []
-        image_stats = {"google_places": 0, "unsplash": 0, "placeholder": 0}
+        image_stats = {"google_places": 0, "pexels": 0, "unsplash": 0, "placeholder": 0}
 
         for i, biz in enumerate(all_businesses, 1):
             name = biz.get("name", "不明")
@@ -126,6 +126,7 @@ class Pipeline:
         self.log(f"HP生成完了: {len(generated)}件", "success")
         self.log(
             f"  画像ソース: Google Places {image_stats['google_places']}件, "
+            f"Pexels {image_stats['pexels']}件, "
             f"Unsplash {image_stats['unsplash']}件, プレースホルダー {image_stats['placeholder']}件",
             "image"
         )
@@ -190,7 +191,7 @@ class Pipeline:
         print(f"│  業種:           {business_type:<40}│")
         print(f"│  発見ビジネス:   {len(all_businesses):<40}│")
         print(f"│  生成HP数:       {len(generated):<40}│")
-        print(f"│  画像ソース:     G:{image_stats['google_places']} U:{image_stats['unsplash']} P:{image_stats['placeholder']:<24}│")
+        print(f"│  画像ソース:     G:{image_stats['google_places']} Px:{image_stats['pexels']} U:{image_stats['unsplash']} P:{image_stats['placeholder']:<19}│")
         print(f"│  実行時間:       {elapsed}秒{' ' * (37 - len(str(elapsed)))}│")
         print("├──────────────────────────────────────────────────────────┤")
         print("│  生成済みHP一覧:                                          │")

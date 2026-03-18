@@ -90,9 +90,10 @@
     inset: 0;
     z-index: 0;
     background:
-        radial-gradient(ellipse 80% 60% at 20% 30%, color-mix(in srgb, var(--accent1) 25%, transparent), transparent),
-        radial-gradient(ellipse 60% 80% at 80% 70%, color-mix(in srgb, var(--accent2) 20%, transparent), transparent),
-        radial-gradient(ellipse 100% 100% at 50% 50%, color-mix(in srgb, var(--accent1) 8%, var(--bg)), var(--bg));
+        radial-gradient(ellipse 70% 50% at 25% 35%, color-mix(in srgb, var(--accent1) 35%, transparent), transparent),
+        radial-gradient(ellipse 60% 70% at 75% 65%, color-mix(in srgb, var(--accent2) 30%, transparent), transparent),
+        radial-gradient(ellipse 50% 40% at 60% 20%, color-mix(in srgb, var(--accent1) 15%, transparent), transparent),
+        radial-gradient(ellipse 120% 80% at 50% 80%, color-mix(in srgb, var(--bg) 100%, transparent), var(--bg));
 }
 
 /* ノイズテクスチャ（SVGインライン） */
@@ -102,6 +103,18 @@
     z-index: 1;
     opacity: 0.35;
     pointer-events: none;
+}
+
+/* マウス追従グロー */
+.hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: radial-gradient(circle 300px at var(--mouse-x, 50%) var(--mouse-y, 50%),
+        color-mix(in srgb, var(--accent1) 8%, transparent), transparent);
+    pointer-events: none;
+    transition: background 0.3s;
 }
 
 /* オーバーレイ（画像なし: カラースキームのグラデーション） */
@@ -202,6 +215,14 @@
     transform-origin: top;
 }
 
+/* ===== SECTION DIVIDER ===== */
+.section-divider {
+    width: 60px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent1), transparent);
+    margin: 0 auto;
+}
+
 /* ===== ABOUT ===== */
 .about-content {
     line-height: 2.2;
@@ -265,31 +286,90 @@
     opacity: 1;
 }
 
-/* ギャラリープレースホルダー */
+/* ギャラリープレースホルダー（リッチグラデーション） */
 .gallery-placeholder {
+    position: relative;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.75rem;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid var(--border);
-    border-radius: 12px;
     aspect-ratio: 4/3;
+    border-radius: 12px;
+    overflow: hidden;
+    background:
+        radial-gradient(ellipse at 30% 40%, color-mix(in srgb, var(--accent1) 20%, transparent), transparent 70%),
+        radial-gradient(ellipse at 70% 60%, color-mix(in srgb, var(--accent2) 15%, transparent), transparent 70%),
+        var(--surface);
+    border: 1px solid color-mix(in srgb, var(--accent1) 12%, transparent);
+    transition: border-color 0.4s;
+}
+.gallery-placeholder:hover {
+    border-color: color-mix(in srgb, var(--accent1) 30%, transparent);
 }
 .gallery-placeholder-icon {
-    font-size: 2.5rem;
-    opacity: 0.3;
-}
-.gallery-placeholder-text {
-    font-size: 0.7rem;
-    color: var(--text-muted);
-    opacity: 0.4;
-    letter-spacing: 0.1em;
+    font-size: 3.5rem;
+    opacity: 0.15;
+    filter: blur(0.5px);
 }
 
 @media (max-width: 600px) {
     .gallery-grid { grid-template-columns: 1fr; }
+}
+
+/* ===== MENU ===== */
+.menu-section {
+    max-width: 640px;
+    text-align: center;
+}
+.menu-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: var(--accent1);
+    margin-bottom: 1rem;
+}
+.menu-title {
+    font-family: {{ colors.font_display }};
+    font-weight: 300;
+    font-size: 1.4rem;
+    letter-spacing: 0.1em;
+    margin-bottom: 3rem;
+}
+.menu-list {
+    list-style: none;
+    text-align: left;
+}
+.menu-item {
+    display: flex;
+    align-items: baseline;
+    padding: 1.2rem 0;
+    border-bottom: 1px solid var(--border);
+}
+.menu-item:last-child {
+    border-bottom: none;
+}
+.menu-name {
+    font-size: 0.95rem;
+    white-space: nowrap;
+}
+.menu-dots {
+    flex: 1;
+    border-bottom: 1px dotted color-mix(in srgb, var(--text-muted) 30%, transparent);
+    margin: 0 1rem;
+    min-width: 2rem;
+    position: relative;
+    top: -4px;
+}
+.menu-price {
+    font-size: 0.9rem;
+    color: var(--accent1);
+    white-space: nowrap;
+    letter-spacing: 0.05em;
+}
+
+@media (max-width: 600px) {
+    .menu-name { white-space: normal; font-size: 0.88rem; }
+    .menu-price { font-size: 0.85rem; }
+    .menu-dots { min-width: 1rem; }
 }
 
 /* ===== INFO ===== */
@@ -302,15 +382,15 @@
     display: flex;
     align-items: flex-start;
     gap: 1rem;
-    padding: 1.5rem;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.08);
+    padding: 1.75rem 1.5rem;
+    background: var(--surface);
+    border: 1px solid color-mix(in srgb, var(--accent1) 12%, transparent);
     border-radius: 14px;
     transition: border-color 0.4s, background 0.4s;
 }
 .info-item:hover {
     border-color: color-mix(in srgb, var(--accent1) 40%, transparent);
-    background: rgba(255,255,255,0.06);
+    background: color-mix(in srgb, var(--surface) 90%, var(--accent1));
 }
 .info-icon {
     font-size: 1.4rem;
@@ -321,7 +401,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 10px;
-    background: color-mix(in srgb, var(--accent1) 10%, transparent);
+    background: color-mix(in srgb, var(--accent1) 15%, transparent);
 }
 .info-label {
     font-size: 0.7rem;
@@ -377,12 +457,12 @@
     display: inline-flex;
     align-items: center;
     gap: 0.6rem;
-    padding: 1rem 2.5rem;
+    padding: 1.15rem 3rem;
     background: linear-gradient(135deg, var(--accent1), var(--accent2));
     color: white;
     border: none;
     border-radius: 100px;
-    font-size: 1.05rem;
+    font-size: 1.1rem;
     font-weight: 700;
     text-decoration: none;
     cursor: pointer;
@@ -394,6 +474,13 @@
 .cta-btn:hover {
     transform: translateY(-3px);
     box-shadow: 0 12px 40px color-mix(in srgb, var(--accent1) 35%, transparent);
+}
+.cta-note {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-top: 1rem;
+    opacity: 0.5;
+    position: relative;
 }
 
 /* ===== FOOTER ===== */
@@ -449,7 +536,7 @@
             <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/>
             <feColorMatrix type="saturate" values="0"/>
         </filter>
-        <rect width="100%" height="100%" filter="url(#noiseFilter)" opacity="0.08"/>
+        <rect width="100%" height="100%" filter="url(#noiseFilter)" opacity="0.04"/>
     </svg>
 
     <div class="hero-overlay {{ 'hero-overlay--photo' if has_photo }}"></div>
@@ -488,6 +575,7 @@
     </div>
     {% endif %}
 </section>
+<div class="section-divider"></div>
 {% endblock %}
 
 {% block gallery %}
@@ -508,7 +596,6 @@
         {% if img.endswith('.svg') %}
         <div class="gallery-placeholder">
             <span class="gallery-placeholder-icon">{{ cat_icon }}</span>
-            <span class="gallery-placeholder-text">PHOTO COMING SOON</span>
         </div>
         {% else %}
         <div class="gallery-item">
@@ -518,6 +605,26 @@
         {% endfor %}
     </div>
 </section>
+<div class="section-divider"></div>
+{% endif %}
+{% endblock %}
+
+{% block menu %}
+{% if menu_items and menu_items | length > 0 %}
+<section class="section menu-section" id="menu">
+    <p class="menu-label">MENU</p>
+    <h2 class="menu-title">おすすめ</h2>
+    <ul class="menu-list">
+        {% for item in menu_items %}
+        <li class="menu-item">
+            <span class="menu-name">{{ item.name }}</span>
+            <span class="menu-dots"></span>
+            <span class="menu-price">{{ item.price }}</span>
+        </li>
+        {% endfor %}
+    </ul>
+</section>
+<div class="section-divider"></div>
 {% endif %}
 {% endblock %}
 
@@ -566,6 +673,7 @@
         {% endif %}
     </div>
 </section>
+<div class="section-divider"></div>
 {% endblock %}
 
 {% block access %}
@@ -581,6 +689,7 @@
         </iframe>
     </div>
 </section>
+<div class="section-divider"></div>
 {% endif %}
 {% endblock %}
 
@@ -593,10 +702,12 @@
     {% else %}
     <a class="cta-btn" href="#">📞 お電話はこちら</a>
     {% endif %}
+    <p class="cta-note">※ お電話でのご予約を承っております</p>
 </section>
 {% endblock %}
 
 {% block footer %}
+<div class="section-divider"></div>
 <footer class="footer">
     <p>&copy; {{ year }} {{ biz.name }}. All rights reserved.</p>
     <p class="footer-powered">Powered by アポ太郎 — AI営業アシスタント</p>
@@ -612,5 +723,17 @@ if (nav) {
     window.addEventListener('scroll', () => {
         nav.classList.toggle('scrolled', window.scrollY > 80);
     }, { passive: true });
+}
+
+// ヒーローのマウス追従グロー
+const hero = document.querySelector('.hero');
+if (hero) {
+    hero.addEventListener('mousemove', (e) => {
+        const rect = hero.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width * 100).toFixed(1) + '%';
+        const y = ((e.clientY - rect.top) / rect.height * 100).toFixed(1) + '%';
+        hero.style.setProperty('--mouse-x', x);
+        hero.style.setProperty('--mouse-y', y);
+    });
 }
 {% endblock %}
